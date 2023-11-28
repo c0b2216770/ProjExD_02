@@ -36,14 +36,14 @@ def main():
     kk_img2 = pg.image.load("ex02/fig/3.png")
     kk_img2 = pg.transform.flip(kk_img2,True, False)
     kk_img_over = pg.image.load("ex02/fig/6.png")
-    kk_img_over = pg.transform.rotozoom(kk_img_over, 0, 3.0)
+    kk_img_over = pg.transform.rotozoom(kk_img_over, 0, 2.0)
     kk_imgs = { # 追加要素 1 :こうかとんの向き(画像追加)
         pg.K_UP:pg.transform.rotozoom(kk_img, 270, 2.0),
         pg.K_DOWN:pg.transform.rotozoom(kk_img, 90, 2.0),
         pg.K_LEFT:pg.transform.rotozoom(kk_img, 0, 2.0),
         pg.K_RIGHT:pg.transform.rotozoom(kk_img2, 0, 2.0)
     }
-    current_img = kk_imgs[pg.K_UP]
+    current_img = kk_imgs[pg.K_LEFT]
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     bb_img = pg.Surface((20,20)) # 練習 1 : 透明のSurfaceを作る
@@ -62,7 +62,8 @@ def main():
                 return
             
         if kk_rct.colliderect(bb_rct): # 練習 5 : 衝突判定
-            screen.blit(kk_img_over, kk_rct)
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img_over, kk_rct) # 追加要素 2 :Game Over時こうかとんの画像を変更
             pg.display.update()
             delay = 1
             time.sleep(delay)
