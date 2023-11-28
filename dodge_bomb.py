@@ -26,6 +26,7 @@ def check_bound(rct):# 練習4 : はみ出さないように修正
         tate = False
     return yoko, tate
 
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
