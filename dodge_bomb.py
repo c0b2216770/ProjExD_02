@@ -13,7 +13,7 @@ delta = { # 練習 3 :移動量の設定
     pg.K_RIGHT: (+5, 0)
 }
 
-def check_bound(rct):
+def check_bound(rct):# 練習4 はみ出さないように修正
     """
     オブジェクトが画面外を判定し、真理値タプルを返す関数
     引数 rct:こうかとんor爆弾SurfaceのRect
@@ -48,6 +48,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+            
+        if kk_rct.colliderect(bb_rct):
+            print("Game Over")
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
