@@ -3,8 +3,6 @@ from random import randint
 import time
 import pygame as pg
 
-
-
 WIDTH, HEIGHT = 1600, 900
 
 delta = { # 練習 3 :移動量の設定 
@@ -64,6 +62,14 @@ def main():
         if kk_rct.colliderect(bb_rct): # 練習 5 : 衝突判定
             screen.blit(bg_img, [0, 0])
             screen.blit(kk_img_over, kk_rct) # 追加要素 2 :Game Over時こうかとんの画像を変更
+            pg.display.update()
+            delay = 1
+            time.sleep(delay)
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img_over, kk_rct)
+            fonto = pg.font.Font(None, 80)
+            txt = fonto.render("Game Over", True, (255, 0, 0)) # 追加要素 3 :Game Overと画面に表示
+            screen.blit(txt, [300, 200])
             pg.display.update()
             delay = 1
             time.sleep(delay)
