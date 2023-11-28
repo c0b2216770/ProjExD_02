@@ -1,5 +1,6 @@
 import sys
 from random import randint
+import time
 import pygame as pg
 
 
@@ -12,6 +13,7 @@ delta = { # 練習 3 :移動量の設定
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
+
 
 def check_bound(rct):# 練習4 はみ出さないように修正
     """
@@ -31,7 +33,17 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
-    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_img2 = pg.image.load("ex02/fig/3.png")
+    kk_img2 = pg.transform.flip(kk_img2,True, False)
+    kk_img_over = pg.image.load("ex02/fig/6.png")
+    kk_img_over = pg.transform.rotozoom(kk_img_over, 0, 3.0)
+    kk_imgs = { # 追加要素 1 :こうかとんの向き(画像追加)
+        pg.K_UP:pg.transform.rotozoom(kk_img, 270, 2.0),
+        pg.K_DOWN:pg.transform.rotozoom(kk_img, 90, 2.0),
+        pg.K_LEFT:pg.transform.rotozoom(kk_img, 0, 2.0),
+        pg.K_RIGHT:pg.transform.rotozoom(kk_img2, 0, 2.0)
+    }
+    current_img = kk_imgs[pg.K_UP]
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     bb_img = pg.Surface((20,20)) # 練習 1 : 透明のSurfaceを作る
@@ -49,7 +61,11 @@ def main():
             if event.type == pg.QUIT: 
                 return
             
-        if kk_rct.colliderect(bb_rct):
+        if kk_rct.colliderect(bb_rct): # 練習 5 : 衝突判定
+            screen.blit(kk_img_over, kk_rct)
+            pg.display.update()
+            delay = 1
+            time.sleep(delay)
             print("Game Over")
             return
 
@@ -59,12 +75,13 @@ def main():
             if key_lst[k]: #　キーが押されたら
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
+                current_img = kk_imgs.get(k)
 
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-        screen.blit(kk_img, kk_rct)
+        screen.blit(current_img, kk_rct)
         bb_rct.move_ip(vx, vy) #　練習 2 : 爆弾を移動させる
         yoko, tate = check_bound(bb_rct)
         if not yoko: #　横方向にはみ出たら
