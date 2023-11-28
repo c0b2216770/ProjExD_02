@@ -6,12 +6,25 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
-delta = {
+delta = { # 練習 3 :移動量の設定 
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, +5),
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
-}# 練習 3 :移動量の設定 
+}
+
+def check_bound(rct):
+    """
+    オブジェクトが画面外を判定し、真理値タプルを返す関数
+    引数 rct:こうかとんor爆弾SurfaceのRect
+    戻り値:横方向,縦方向はみだし判定結果(画面内: True/画面外: False)
+    """
+    yoko, tate = True, True
+    if rct.left < 0 or WIDTH < rct.right:
+        yoko = False
+    if rct.top < 0 or HEIGHT < rct.bottom:
+        tate = False
+    return yoko, tate
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -45,8 +58,15 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy) #　練習 2 : 爆弾を移動させる
+        yoko, tate = check_bound(bb_rct)
+        if not yoko: #　横方向にはみ出たら
+            vx *= -1
+        if not tate:
+            vy *= -1 # 縦方向にはみ出たら
         screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
